@@ -7,15 +7,15 @@ prepare:
 	mkdir -p /home/bryella/data/wp
 	mkdir -p /home/bryella/data/db
 docker:
-	sudo apt-get update
-	sudo apt install apt-transport-https ca-certificates curl gnupg2 software-properties-common
-	curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-	sudo apt update
-	apt-cache policy docker-ce
-	sudo apt install docker-ce
-	sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-	sudo chmod +x /usr/local/bin/docker-compose
+	@sudo apt-get update
+	@sudo apt install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+	@curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+	@sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+	@sudo apt update
+	@apt-cache policy docker-ce
+	@sudo apt install docker-ce
+	@sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	@sudo chmod +x /usr/local/bin/docker-compose
 start:
 	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up
 down:
@@ -30,5 +30,9 @@ clean:
 	docker rmi -f $$(docker images -qa);\
 	docker volume rm $$(docker volume ls -q);\
 	docker network rm $$(docker network ls -q)
+git:
+	git add *
+	git commit -m "inkektion"
+	git push
 
 .PHONY: start down stop
