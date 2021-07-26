@@ -1,0 +1,59 @@
+version: '3.7'
+volumes:
+  wp:
+    driver: local
+    name: wordpress
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/bryella/data/wp
+  db:
+    driver: local
+    name: db
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/bryella/data/db
+
+networks:
+  inception_net:
+    name: inception_net
+    driver: bridge
+
+services:
+ mysql:
+  image: mariadb
+  env_file: .env
+  volumes:
+   - db:/var/lib/mysql
+  restart: always
+  build: requirements/db/
+  networks:
+    - inception_net
+  container_name: mariadb
+ nginx:
+  image: nginx
+  volumes:
+   - wp:/var/www/html
+  depends_on:
+   - wp
+  ports:
+   - "443:443"
+  env_file: .env
+  restart: always
+  build: requirements/nginx/
+  networks:
+    - inception_net
+  container_name: nginx
+ wp:
+  image: wordpress
+  env_file: .env
+  depends_on:
+    - mysql
+  volumes:
+   - wp:/var/www/html
+  restart: always
+  build: requirements/wp/
+  networks:
+    - inception_net
+  container_name: wordpress
