@@ -16,8 +16,8 @@ volumes:
       device: /home/bryella/data/db
 
 networks:
-  inception_net:
-    name: inception_net
+  inkektion:
+    name: inkektion
     driver: bridge
 
 services:
@@ -29,7 +29,7 @@ services:
   restart: always
   build: requirements/db/
   networks:
-    - inception_net
+    - inkektion
   container_name: mariadb
  nginx:
   image: nginx
@@ -43,7 +43,7 @@ services:
   restart: always
   build: requirements/nginx/
   networks:
-    - inception_net
+    - inkektion
   container_name: nginx
  wp:
   image: wordpress
@@ -55,5 +55,5 @@ services:
   restart: always
   build: requirements/wp/
   networks:
-    - inception_net
+    - inkektion
   container_name: wordpress
